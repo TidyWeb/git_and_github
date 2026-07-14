@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Git and GitHub Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#eef1f4;
+  --panel:#fffdfa;
+  --ink:#202124;
+  --muted:#5f6368;
+  --line:#dde2e8;
+  --rail-bg:#17212b;
+  --rail-text:#dce7ef;
+  --rail-muted:#8fa4b5;
+  --navy:#1f4f82;
+  --cyan:#1f7a8c;
+  --yellow:#f6c85f;
+  --green:#4d6b4f;
+  --orange:#d97706;
+  --plum:#7d4655;
+  --code-bg:#111820;
+  --code-bg2:#18222c;
+  --mono-bg:#f4f5f7;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body { background:var(--bg); color:var(--ink); font-family:'IBM Plex Sans', sans-serif; }
+.frame { width:min(1160px, calc(100vw - 32px)); margin:30px auto 60px; display:grid; grid-template-columns:220px minmax(0,1fr); background:var(--panel); border:1px solid var(--line); box-shadow:0 16px 46px rgba(39,50,60,.18); }
+.rail { background:var(--rail-bg); color:var(--rail-text); padding:32px 22px 40px; position:sticky; top:0; height:100vh; overflow-y:auto; }
+.rail-logo-wrap { margin-bottom:20px; }
+.rail-logo { display:block; width:84px; max-width:100%; height:auto; border-radius:10px; }
+.rail-title { font-family:'Atkinson Hyperlegible', sans-serif; font-size:20px; font-weight:700; color:white; line-height:1.2; margin-bottom:6px; }
+.rail-sub { font-size:12px; color:var(--rail-muted); line-height:1.55; margin-bottom:28px; padding-bottom:20px; border-bottom:1px solid rgba(255,255,255,.1); }
+.token { display:flex; gap:10px; align-items:center; padding:9px 0; border-top:1px solid rgba(255,255,255,.1); font:600 11px 'IBM Plex Mono', monospace; text-transform:uppercase; letter-spacing:.06em; color:var(--rail-muted); }
+.dot { width:10px; height:10px; border-radius:50%; background:var(--yellow); flex-shrink:0; }
+.dot.cyan { background:var(--cyan); }
+.dot.green { background:var(--green); }
+.dot.orange { background:var(--orange); }
+.rail-nav { margin-top:22px; border-top:1px solid rgba(255,255,255,.1); padding-top:16px; }
+.rail-nav-label { font:600 10px 'IBM Plex Mono', monospace; text-transform:uppercase; letter-spacing:.08em; color:var(--rail-muted); margin-bottom:10px; }
+.rail-nav a { display:flex; align-items:center; gap:8px; padding:7px 0; font-size:13px; color:var(--rail-text); text-decoration:none; line-height:1.35; border-bottom:1px solid rgba(255,255,255,.06); }
+.rail-nav a:hover { color:white; }
+.rail-nav a .num { font:600 10px 'IBM Plex Mono', monospace; color:var(--rail-muted); flex-shrink:0; width:22px; }
+main { padding:48px 52px 72px; }
+.page-mode { font:700 11px 'IBM Plex Mono', monospace; letter-spacing:.1em; text-transform:uppercase; color:var(--cyan); margin-bottom:10px; }
+.page-title { font-family:'Atkinson Hyperlegible', sans-serif; font-size:36px; font-weight:700; color:var(--navy); line-height:1.1; margin-bottom:14px; }
+.page-sub { font-size:16px; line-height:1.75; color:var(--muted); margin-bottom:48px; padding-bottom:28px; border-bottom:2px solid var(--mono-bg); }
+.note-section { margin-bottom:64px; scroll-margin-top:20px; }
+.note-eyebrow { display:flex; align-items:center; gap:12px; margin-bottom:20px; }
+.note-num { font:600 11px 'IBM Plex Mono', monospace; color:var(--muted); letter-spacing:.06em; }
+.note-heading { font-family:'Atkinson Hyperlegible', sans-serif; font-size:24px; font-weight:700; color:var(--navy); line-height:1.2; }
+.note-rule { flex:1; height:1px; background:var(--line); margin-left:4px; }
+.stack { display:grid; gap:12px; }
+.panel { border:1px solid var(--line); background:#fbfcfd; border-radius:4px; overflow:hidden; }
+.panel header { display:flex; justify-content:space-between; align-items:center; padding:8px 14px; border-bottom:1px solid var(--line); font:600 11px 'IBM Plex Mono', monospace; text-transform:uppercase; letter-spacing:.08em; }
+.panel header .tag { color:var(--navy); }
+.panel header .type { color:var(--muted); }
+.panel .body { padding:16px 20px; font-size:16px; line-height:1.8; }
+.panel .body p + p { margin-top:10px; }
+.panel.translation { border-left:4px solid var(--yellow); }
+.panel.rule { border-left:4px solid var(--orange); }
+.panel.resolution { border-left:4px solid var(--cyan); }
+.panel.code { background:var(--code-bg); color:#e8eef4; border-color:#26313c; border-left-color:#26313c; }
+.panel.code header { background:var(--code-bg2); border-color:#26313c; color:#8ea3b5; }
+.panel.code header .tag { color:#c5d8ea; }
+.panel.code .body { padding:0; }
+.panel.code pre { margin:0; padding:18px 22px; font:15px/1.9 'IBM Plex Mono', monospace; white-space:pre-wrap; overflow-wrap:anywhere; }
+.command-grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:14px; }
+.command-box { display:block; border:2px solid #cfd8e3; border-left:7px solid var(--cyan); border-radius:12px; background:linear-gradient(180deg, #ffffff 0%, #f6f9fc 100%); padding:18px 20px; min-height:122px; box-shadow:0 8px 18px rgba(31,79,130,.08); }
+.command-box .command { display:block; font:700 21px/1.35 'IBM Plex Mono', monospace; color:var(--navy); margin-bottom:10px; overflow-wrap:anywhere; }
+.command-box .meaning { display:block; font-size:16px; line-height:1.55; color:#3f4954; }
+.command-box.inspect { border-left-color:var(--orange); }
+.command-box.structure { border-left-color:var(--green); }
+.command-box.select { border-left-color:var(--plum); }
+.command-box.count { border-left-color:var(--yellow); }
+.part-outer { color:#d97706; font-weight:600; }
+.part-inner { color:#1f4f82; font-weight:600; }
+.part-core { color:#4d6b4f; font-weight:600; }
+.part-var { color:#d8e7ff; }
+.part-note { color:#9ed18c; }
+.mono { font-family:'IBM Plex Mono', monospace; background:var(--mono-bg); border-radius:4px; padding:.05em .3em; white-space:nowrap; }
+table { width:100%; border-collapse:collapse; font-size:15px; }
+th, td { border:1px solid var(--line); padding:12px 14px; vertical-align:top; text-align:left; }
+th { background:#f7f9fb; color:var(--navy); font-family:'IBM Plex Mono', monospace; font-size:12px; text-transform:uppercase; letter-spacing:.05em; }
+.legend { display:grid; gap:8px; font-size:15px; }
+.legend p { line-height:1.7; }
+.plain-english { font-style:italic; font-size:15px; color:var(--muted); border-top:1px solid var(--line); padding:14px 20px; line-height:1.7; background:#fbfcfd; }
+.footer { color:var(--muted); font-size:13px; text-align:center; margin-top:64px; }
+@media (max-width:860px) { .frame { grid-template-columns:1fr; } .rail { display:none; } main { padding:32px 22px 48px; } .page-title { font-size:26px; } .command-grid { grid-template-columns:1fr; } .command-box .command { font-size:18px; } }
+</style>
+</head>
+<body>
+<article class="frame">
+  <aside class="rail">
+    <div class="rail-logo-wrap">
+      <img class="rail-logo" src="tidyweb_logo.png" alt="TidyWeb logo">
+    </div>
+    <div class="rail-title">Git and GitHub</div>
+    <div class="rail-sub">From your first local save to your first GitHub push. No prior experience required.</div>
+    <div class="token"><span class="dot"></span> Translation</div>
+    <div class="token"><span class="dot cyan"></span> Command</div>
+    <div class="token"><span class="dot orange"></span> Rule</div>
+    <div class="token"><span class="dot green"></span> Plain-English Summary</div>
+    <nav class="rail-nav">
+      <div class="rail-nav-label">Sections</div>
+      <a href="#model"><span class="num">01</span><span>The Mental Model</span></a>
+      <a href="#setup"><span class="num">02</span><span>Setup</span></a>
+      <a href="#publish"><span class="num">03</span><span>Publish a Local Project</span></a>
+      <a href="#get-project"><span class="num">04</span><span>Get a GitHub Project</span></a>
+      <a href="#update-project"><span class="num">05</span><span>Update a Clone</span></a>
+      <a href="#workflow"><span class="num">06</span><span>The Everyday Loop</span></a>
+      <a href="#github"><span class="num">07</span><span>GitHub vs Git</span></a>
+    </nav>
+  </aside>
+  <main>
+    <div class="page-mode">Supplementary Module</div>
+    <h1 class="page-title">Git and GitHub</h1>
+    <p class="page-sub">Git is version control. GitHub is an online home for Git repositories. We communicate with Git through a <strong>command-line interface</strong>, or <strong>CLI</strong>: a text-based application called Konsole or Terminal on Linux, Terminal on macOS, and Windows Terminal or PowerShell on Windows. This reference begins before the commands—with the account and identity GitHub expects—then follows a project from its first local snapshot to its first push online.</p>
+
+    <section class="note-section" id="model">
+      <div class="note-eyebrow"><span class="note-num">NOTE 01</span><h2 class="note-heading">The Mental Model</h2><span class="note-rule"></span></div>
+      <div class="stack">
+        <div class="panel resolution">
+          <header><span class="tag">Plain English</span><span class="type">what Git actually is</span></header>
+          <div class="body">
+            <p>Git tracks changes to files over time. Every time you tell it to, it takes a snapshot of your project. You can go back to any snapshot. You can share snapshots with other people. That is the whole thing.</p>
+            <p>Think of it as a save-game system for code. Every commit is a save point. If something breaks, you load an earlier save.</p>
+            <p>You give Git instructions by typing commands into the command-line interface—the CLI—and pressing <strong>Enter</strong> or <strong>Return</strong>. Every Git command shown in this guide goes there.</p>
+          </div>
+          <div class="plain-english">Git does not back up automatically. You tell it when to save.</div>
+        </div>
+        <div class="panel translation">
+          <header><span class="tag">Three Zones</span><span class="type">where your work lives</span></header>
+          <div class="body">
+            <table><thead><tr><th>Zone</th><th>What it contains</th></tr></thead><tbody>
+              <tr><td>Working directory</td><td>The files you are editing right now. Git watches but does not save yet.</td></tr>
+              <tr><td>Staging area</td><td>Files you have marked as ready to be saved in the next snapshot.</td></tr>
+              <tr><td>Repository</td><td>The permanent record of every snapshot you have committed.</td></tr>
+            </tbody></table>
+          </div>
+          <div class="plain-english"><span class="mono">git add</span> moves work from zone 1 to zone 2. <span class="mono">git commit</span> moves it from zone 2 to zone 3.</div>
+        </div>
+        <div class="panel rule">
+          <header><span class="tag">Rule</span><span class="type">commit often, commit small</span></header>
+          <div class="body">
+            <p>A commit should represent one logical change, not a day's work.</p>
+            <p>Good commit message: <span class="mono">Add filtering to the sales notebook</span></p>
+            <p>Bad commit message: <span class="mono">stuff</span> or <span class="mono">changes</span> or <span class="mono">final final v3</span></p>
+            <p>The message is for future you. Be specific.</p>
+          </div>
+          <div class="plain-english">You will read your own commit messages in six months. Write them accordingly.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="note-section" id="setup">
+      <div class="note-eyebrow"><span class="note-num">NOTE 02</span><h2 class="note-heading">One-Time Setup</h2><span class="note-rule"></span></div>
+      <div class="stack">
+        <div class="panel translation">
+          <header><span class="tag">Where Git commands go</span><span class="type">the command-line interface</span></header>
+          <div class="body">
+            <p>The commands in this guide are entered into a <strong>command-line interface</strong>, often shortened to <strong>CLI</strong>. It is a text-based application where you type an instruction and press <strong>Enter</strong> or <strong>Return</strong> to run it.</p>
+            <p>The application has different names on different systems. On Linux it may be called <strong>Konsole</strong> or <strong>Terminal</strong>. On macOS it is commonly <strong>Terminal</strong>. On Windows, use <strong>Windows Terminal</strong> or <strong>PowerShell</strong>.</p>
+            <p>Commands operate from the folder the CLI is currently opened in. Before running a Git command, make sure the CLI is in the project folder—or, when cloning, in the parent folder where you want Git to create the new project folder.</p>
+          </div>
+          <div class="plain-english">A command shown in a dark or monospace box is something to type into your CLI, then run by pressing Enter or Return.</div>
+        </div>
+        <div class="panel translation">
+          <header><span class="tag">Create a GitHub account</span><span class="type">before connecting a project</span></header>
+          <div class="body">
+            <p>Create a free personal account at <a href="https://github.com/">github.com</a>. Your GitHub username must be available and becomes part of your public profile and repository addresses, so choose something you are comfortable sharing.</p>
+            <p>Verify the account email and protect the account with a strong, unique password and two-factor authentication. GitHub Free is enough for public learning projects.</p>
+          </div>
+          <div class="plain-english">Git can save work locally without an account. A GitHub account is needed when you want GitHub to host that work online.</div>
+        </div>
+        <div class="panel resolution">
+          <header><span class="tag">Configure Git</span><span class="type">run these once, ever</span></header>
+          <div class="body">
+            <p>Before making commits, tell Git what author name and email to write into them. These are commit details, not your GitHub sign-in details. Your Git author name does not have to match your GitHub username.</p>
+            <p>Enter each of the following commands into your CLI, pressing <strong>Enter</strong> or <strong>Return</strong> after each one.</p>
+            <div class="command-grid">
+              <div class="command-box"><span class="command">git config --global user.name "Your Name"</span><span class="meaning">Sets the author name shown on future commits. It can be your real name or another name you deliberately choose.</span></div>
+              <div class="command-box"><span class="command">git config --global user.email "you@email.com"</span><span class="meaning">Use an email verified on your GitHub account—or GitHub's private noreply address—so GitHub can attribute future commits to you.</span></div>
+            </div>
+          </div>
+          <div class="plain-english">GitHub username identifies your account. Git author name labels your commits. Git author email connects those commits to your GitHub account.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="note-section" id="publish">
+      <div class="note-eyebrow"><span class="note-num">NOTE 03</span><h2 class="note-heading">Publish a New Local Project</h2><span class="note-rule"></span></div>
+      <div class="stack">
+        <div class="panel resolution"><header><span class="tag">Route</span><span class="type">your files began on this computer</span></header><div class="body"><p>Use this route when you already have a local project on your computer and have created an empty GitHub repository to host it. Local Git must save the files, learn the GitHub repository's address, and then make the first push.</p><p>First, open the local project folder in your file manager. Open your CLI—Konsole, Terminal, Windows Terminal, or PowerShell—in that project folder. This matters because Git applies the commands to the folder the CLI is currently working in.</p><p>Enter each command in this route into that CLI and press <strong>Enter</strong> or <strong>Return</strong> to run it. Read the result before moving to the next step.</p></div><div class="plain-english">Open the project folder → open the CLI there → initialise → inspect → stage → commit → connect → push.</div></div>
+        <div class="panel resolution"><header><span class="tag">git init</span><span class="type">start tracking a project</span></header><div class="body"><p>Run this once inside a project folder to tell Git to start tracking it. It creates a hidden <span class="mono">.git</span> folder that stores all the version history. You never touch the <span class="mono">.git</span> folder directly.</p></div><div class="plain-english">One project, one git init, done once.</div></div>
+        <div class="panel resolution"><header><span class="tag">git status</span><span class="type">what is happening right now</span></header><div class="body"><p>Shows you which files have changed, which are staged, and which are untracked. Run this constantly. It costs nothing and tells you exactly where you are.</p></div><div class="plain-english">When in doubt, git status. Always.</div></div>
+        <div class="panel resolution"><header><span class="tag">git add</span><span class="type">stage a file for saving</span></header><div class="body"><p>Marks a file as ready to be included in the next commit. <span class="mono">git add filename.py</span> stages one file. <span class="mono">git add .</span> stages everything that has changed in the current folder. Staging is reversible. Committing is permanent.</p></div><div class="plain-english">You are choosing what goes into this snapshot. Choose deliberately.</div></div>
+        <div class="panel resolution"><header><span class="tag">git commit</span><span class="type">take the snapshot</span></header><div class="body"><p>Saves everything in the staging area as a permanent snapshot with a message. The <span class="mono">-m</span> flag lets you write the message inline. <span class="mono">git commit -m "your message here"</span> Every commit gets a unique ID. You can always return to it.</p></div><div class="plain-english">This is the save point. The message is the label on the save.</div></div>
+        <div class="panel resolution"><header><span class="tag">git remote add</span><span class="type">connect a local project to GitHub</span></header><div class="body"><p>Use this once when the project began locally and you later created an empty GitHub repository for it.</p><p><span class="mono">git remote add origin https://github.com/YOUR-USERNAME/YOUR-REPOSITORY.git</span></p><p><span class="mono">remote add</span> records a destination, <span class="mono">origin</span> is the conventional short name for it, and the URL identifies the GitHub repository.</p></div><div class="plain-english">This does not upload anything. It teaches the local repository where “GitHub” is.</div></div>
+        <div class="panel rule"><header><span class="tag">Check the branch name</span><span class="type">master and main are both real</span></header><div class="body"><p>Before the first push, read the first line of <span class="mono">git status</span>. If it says <span class="mono">On branch master</span>, your branch name is <span class="mono">master</span>. If it says <span class="mono">On branch main</span>, your branch name is <span class="mono">main</span>.</p><p>Do not copy <span class="mono">main</span> merely because an example uses it. The first-push command must name the branch that actually exists locally.</p></div><div class="plain-english">The branch name is observed, not guessed.</div></div>
+        <div class="panel resolution"><header><span class="tag">git push</span><span class="type">send the first committed work to GitHub</span></header><div class="body"><p>The first push commonly includes <span class="mono">-u</span>, which records the upstream relationship for later pushes.</p><p>If <span class="mono">git status</span> reports <span class="mono">master</span>: <span class="mono">git push -u origin master</span></p><p>If it reports <span class="mono">main</span>: <span class="mono">git push -u origin main</span></p><p>After that relationship is recorded, later uploads from the same branch can usually use <span class="mono">git push</span>.</p></div><div class="plain-english">Match the command to the reported local branch. Neither name is silently interchangeable with the other.</div></div>
+        <div class="panel resolution"><header><span class="tag">git log</span><span class="type">inspect the saved history</span></header><div class="body"><p>Shows the commits made so far, newest first. Each entry includes its generated ID, author, date, and human-readable message. Press <span class="mono">q</span> to leave the log view.</p></div><div class="plain-english">git log tells you where you have been. git status tells you where you are.</div></div>
+      </div>
+    </section>
+
+    <section class="note-section" id="get-project">
+      <div class="note-eyebrow"><span class="note-num">NOTE 04</span><h2 class="note-heading">Get an Existing GitHub Project</h2><span class="note-rule"></span></div>
+      <div class="stack">
+        <div class="panel translation"><header><span class="tag">Choose the kind of copy</span><span class="type">clone for ongoing work, ZIP for a snapshot</span></header><div class="body"><table><thead><tr><th>Method</th><th>What you receive</th><th>Can Git update it?</th></tr></thead><tbody><tr><td>Clone</td><td>The project, its Git history, and a recorded remote named <span class="mono">origin</span>.</td><td>Yes. It remains connected to the GitHub repository.</td></tr><tr><td>Download ZIP</td><td>Only a snapshot of the files at that moment.</td><td>No. It has no Git history or remote connection.</td></tr></tbody></table></div><div class="plain-english">If you expect to update or contribute later, clone. If you only need a disposable copy of the files, ZIP may be enough.</div></div>
+        <div class="panel resolution"><header><span class="tag">git clone</span><span class="type">make a connected local copy</span></header><div class="body"><p>On the GitHub repository page, select the green <strong>Code</strong> button. GitHub offers several connection choices, commonly <strong>HTTPS</strong>, <strong>SSH</strong>, and <strong>GitHub CLI</strong>.</p><p>For this beginner route, choose <strong>HTTPS</strong> and use GitHub's copy button beside the address. SSH needs keys to be configured first, and GitHub CLI requires a separate command-line tool and sign-in. They are useful alternatives later, but neither is required here.</p><p>Now open your CLI—Konsole, Terminal, Windows Terminal, or PowerShell—in the parent folder where you want the new project folder to be created. Type <span class="mono">git clone</span>, add one space, paste the copied HTTPS address, then press <strong>Enter</strong> or <strong>Return</strong>:</p><p><span class="mono">git clone https://github.com/USERNAME/REPOSITORY.git</span></p><p>Git runs the command and creates a new folder named after the repository. Inside it, Git downloads the project and its history and records the GitHub repository as <span class="mono">origin</span>. Do not run <span class="mono">git init</span> inside the clone.</p></div><div class="plain-english">Code → HTTPS → copy the address → open the CLI in the destination's parent folder → enter the complete command → press Enter or Return.</div></div>
+      </div>
+    </section>
+
+    <section class="note-section" id="update-project">
+      <div class="note-eyebrow"><span class="note-num">NOTE 05</span><h2 class="note-heading">Update a Project Previously Cloned</h2><span class="note-rule"></span></div>
+      <div class="stack">
+        <div class="panel resolution"><header><span class="tag">Open the cloned folder</span><span class="type">the hidden .git connection must be present</span></header><div class="body"><p>Open the terminal inside the folder created by <span class="mono">git clone</span>. A ZIP download cannot follow this update route because it has no repository history or recorded remote.</p></div><div class="plain-english">Update the clone itself, not a separately downloaded replacement folder.</div></div>
+        <div class="panel resolution"><header><span class="tag">git status</span><span class="type">check before receiving changes</span></header><div class="body"><p>Check whether you have local edits before updating. A clean working tree means there is nothing local waiting to be protected. If changed or untracked files appear, stop and decide what should happen to them before pulling.</p></div><div class="plain-english">Inspect first. Do not pull blindly over work you have not saved.</div></div>
+        <div class="panel resolution"><header><span class="tag">git pull</span><span class="type">receive and integrate the connected branch</span></header><div class="body"><p><span class="mono">git pull</span> fetches new commits from the current branch's upstream and integrates them into the local branch. When the clone is clean and still follows its original branch, this is the ordinary update command.</p></div><div class="plain-english">Pull updates a connected Git clone. It does not update a ZIP download.</div></div>
+      </div>
+    </section>
+
+    <section class="note-section" id="workflow">
+      <div class="note-eyebrow"><span class="note-num">NOTE 06</span><h2 class="note-heading">The Everyday Local-to-GitHub Loop</h2><span class="note-rule"></span></div>
+      <div class="stack">
+        <div class="panel translation">
+          <header><span class="tag">The everyday loop</span><span class="type">after the first connection</span></header>
+          <div class="body"><table><thead><tr><th>Step</th><th>Command</th></tr></thead><tbody><tr><td>Check what has changed</td><td><span class="mono">git status</span></td></tr><tr><td>Stage the files you want to save</td><td><span class="mono">git add filename</span> or <span class="mono">git add .</span></td></tr><tr><td>Commit with a clear message</td><td><span class="mono">git commit -m "describe what changed"</span></td></tr><tr><td>Send committed work to the connected branch</td><td><span class="mono">git push</span></td></tr></tbody></table></div>
+          <div class="plain-english">Status, add, commit, push. Repeat every session.</div>
+        </div>
+        <div class="panel rule"><header><span class="tag">Rule</span><span class="type">push before you finish for the day</span></header><div class="body"><p>A commit that lives only on your local machine is at risk. Push to GitHub at the end of every working session. GitHub is the backup. Your local machine is not.</p></div><div class="plain-english">If your laptop died tonight, would your work survive? Push and it would.</div></div>
+      </div>
+    </section>
+
+    <section class="note-section" id="github">
+      <div class="note-eyebrow"><span class="note-num">NOTE 07</span><h2 class="note-heading">GitHub vs Git</h2><span class="note-rule"></span></div>
+      <div class="stack">
+        <div class="panel resolution"><header><span class="tag">Plain English</span><span class="type">two different things</span></header><div class="body"><p>Git is the version control system. It runs on your machine. It has no interface.</p><p>GitHub is a website that hosts Git repositories online. It adds collaboration, visibility, and backup to what Git does locally.</p><p>You can use Git without GitHub. You cannot use GitHub without Git.</p></div><div class="plain-english">Git is the tool. GitHub is where the tool's output lives online.</div></div>
+        <div class="panel translation"><header><span class="tag">What GitHub Adds</span><span class="type">beyond local version control</span></header><div class="body"><table><thead><tr><th>Feature</th><th>What it means in practice</th></tr></thead><tbody><tr><td>Remote backup</td><td>Your commits are safe even if your machine fails.</td></tr><tr><td>Portfolio</td><td>Your public repositories are visible to employers.</td></tr><tr><td>Collaboration</td><td>Others can clone, contribute, and review your work.</td></tr><tr><td>Pull requests</td><td>A formal way to propose changes before they are merged.</td></tr></tbody></table></div><div class="plain-english">The bootcamp will use GitHub as the submission and collaboration platform.</div></div>
+      </div>
+    </section>
+
+    <p class="footer">Created as a supplementary module for Git and GitHub in the Learning_Python project.</p>
+  </main>
+</article>
+</body>
+</html>
