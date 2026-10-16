@@ -1,5 +1,8 @@
 # Git and GitHub Reference
 
+## [🌐 Open the live site: https://tidyweb.github.io/git_and_github/ ↗](https://tidyweb.github.io/git_and_github/)
+
+
 A beginner-friendly reference explaining Git and GitHub in plain English, from opening a command-line interface and configuring Git to publishing, cloning, and updating a project.
 
 ## View the guide
